@@ -1,0 +1,527 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:sch="http://www.ascc.net/xml/schematron"
+    xmlns:ec="http://slasoi.org/monitoring/citymonitor/xmlrule"
+    xmlns="http://www.cumulus.org/certificate/model" xmlns:sla="http://www.slaatsoi.eu/slamodel"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+     xmlns:jxb="http://java.sun.com/xml/ns/jaxb" jxb:version="2.1"
+    targetNamespace="http://www.cumulus.org/certificate/model">
+    <xs:import schemaLocation="slasoi.xsd" namespace="http://www.slaatsoi.eu/slamodel"/>
+
+
+    <xs:complexType name="CommonCertificationModelType">
+        <xs:sequence>
+            <xs:element name="CertificationModelID" type="xs:string"/>
+            <xs:element name="LifeCycle" type="StateTransitionModelType"/>
+            <xs:element name="Signature" type="signatureType"/>
+            <xs:element name="ToC" type="tocType"/>
+            <xsd:element name="SecurityProperty" type="securityPropertyType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="signatureType">
+        <xs:sequence>
+            <xs:element name="Name" type="xs:string"/>
+            <xs:element name="Role" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="AnnotatedType">
+        <xs:sequence>
+            <xs:element minOccurs="1" maxOccurs="1" name="Text" type="xs:string"/>
+            <xs:element minOccurs="1" maxOccurs="1" name="Properties" type="sla:MapStndAny"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AbstractPartyType">
+        <xs:complexContent mixed="false">
+            <xs:extension base="sla:AnnotatedType">
+                <xs:sequence>
+                    <xs:element minOccurs="1" maxOccurs="1" name="ID" type="sla:IDType"/>
+                    <xs:element minOccurs="1" maxOccurs="1" name="Role" type="sla:STNDType"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="securityPropertyType">
+        <xs:sequence maxOccurs="1" minOccurs="1">
+            <xs:element name="sProperty" type="propertyType"/>
+            <xs:element name="Assertion" minOccurs="0">
+                <xs:complexType>
+                    <xs:complexContent mixed="false">
+                        <xs:extension base="AnnotatedType">
+                            <xs:sequence>
+                                <xs:sequence>
+                                    <xs:element minOccurs="1" maxOccurs="1" name="UUID"
+                                        type="sla:UUIDType"/>
+                                    <xs:element minOccurs="1" maxOccurs="1" name="EffectiveFrom"
+                                        type="sla:TimeType"/>
+                                    <xs:element minOccurs="1" maxOccurs="1" name="EffectiveUntil"
+                                        type="sla:TimeType"/>
+                                    <xs:element minOccurs="1" maxOccurs="1" name="AgreedAt"
+                                        type="sla:TimeType"/>
+                                    <xs:element minOccurs="1" maxOccurs="unbounded" name="Party"
+                                        type="sla:AgreementPartyType"/>
+                                    <xs:element minOccurs="0" maxOccurs="unbounded"
+                                        name="AbstractParty" type="AbstractPartyType"/>
+                                    <xs:element minOccurs="1" maxOccurs="unbounded"
+                                        name="InterfaceDeclr" type="sla:InterfaceDeclrType"/>
+                                    <xs:element minOccurs="0" maxOccurs="unbounded"
+                                        name="VariableDeclr" type="sla:VariableDeclrType"/>
+                                    <xs:element minOccurs="1" maxOccurs="unbounded"
+                                        name="AgreementTerm" type="sla:AgreementTermType"/>
+                                </xs:sequence>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="SecurityPropertyId" type="xs:string" use="optional"/>
+        <xs:attribute name="SecurityPropertyDefinition" type="xs:string" use="required"/>
+        <xs:attribute name="Vocabulary" type="xs:string"/>
+        <xs:attribute name="ShortName" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="propertyType">
+        <xs:sequence>
+            <xs:element name="propertyPerformance">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="propertyPerformanceRow" minOccurs="1"
+                            maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="propertyPerformanceCell" minOccurs="1"
+                                        maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:simpleContent>
+                                                <xs:extension base="xs:anySimpleType">
+                                                  <xs:attribute name="name" type="xs:string"
+                                                  use="required"/>
+                                                </xs:extension>
+                                            </xs:simpleContent>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="propertyParameterList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="propertyParameter" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:simpleContent>
+                                    <xs:extension base="xs:anySimpleType">
+                                        <xs:attribute name="name" type="xs:string" use="required"/>
+                                    </xs:extension>
+                                </xs:simpleContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="class" type="xs:anyURI" use="required"/>
+    </xs:complexType>
+
+
+
+
+
+
+
+
+
+
+
+    <xs:complexType name="tocType">
+        <xs:sequence>
+            <xs:element name="CloudLayer" maxOccurs="unbounded">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="SaaS"/>
+                        <xs:enumeration value="PaaS"/>
+                        <xs:enumeration value="IaaS"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="ConcreteToc" type="xs:string"> </xs:element>
+            <xs:element name="TocDescription" type="xs:string"> </xs:element>
+            <xs:element name="TocURI" type="xs:anyURI"/>
+            <xs:choice>
+                <xs:element name="ToTs" type="targetOfTestsType"/>
+                <xs:element name="ToM">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element minOccurs="1" maxOccurs="unbounded" name="providesInterface"
+                                type="sla:InterfaceDeclrType"/>
+                            <xs:element minOccurs="0" maxOccurs="unbounded" name="requiresInterface"
+                                type="sla:InterfaceDeclrType"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+                <xsd:element name="ToI" type="targetOfIntegrityType"/>
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute name="Id" use="required" type="xs:ID"> </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="targetOfTestsType">
+        <xs:sequence maxOccurs="1">
+            <xs:element name="ToT" maxOccurs="unbounded" minOccurs="1">
+                <xsd:complexType>
+                    <xsd:complexContent>
+                        <xsd:extension base="totType">
+                            <xsd:attribute name="collectorRefID" type="xs:string"/>
+                        </xsd:extension>
+                    </xsd:complexContent>
+                </xsd:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="targetOfIntegrityType">
+        <xs:sequence>
+            <xs:element name="ToIComponents" type="componentsType"/>
+            <xs:element name="ToIPlatform" type="toIPlatformType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="toIPlatformType">
+        <xs:sequence>
+            <xs:element name="ToIPlatformComponents" type="componentsType"/>
+            <xs:element name="PhysicalPlatformManufacturer" type="xs:string" minOccurs="0"/>
+            <xs:element name="TPMManufacturer" type="xs:string" minOccurs="0"/>
+            <xs:element name="AIKCredential" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="TPMVersion" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="componentsType">
+        <xs:sequence>
+            <xs:element name="Component" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="NameID" type="xs:string" minOccurs="0"/>
+                        <xs:element name="Vendor" type="xs:string" minOccurs="0"/>
+                        <xs:element name="Release" type="xs:string" minOccurs="0"/>
+                        <xs:element name="Description" type="xs:string" minOccurs="0"/>
+                        <xs:element name="ElementRef" type="xs:anyURI" minOccurs="0"
+                            maxOccurs="unbounded"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="totType">
+        <xs:sequence maxOccurs="1">
+            <xs:element name="Interface" type="interfaceToT" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+
+    <xs:complexType name="StateTransitionModelType">
+        <xs:sequence>
+            <xs:element minOccurs="1" maxOccurs="1" name="InitialState" type="PseudoStateType"/>
+            <xs:element minOccurs="1" maxOccurs="unbounded" name="states" type="StatesType"/>
+            <xs:element minOccurs="1" maxOccurs="unbounded" name="transitions"
+                type="TransitionsType"/>
+            <xs:element minOccurs="0" maxOccurs="1" name="FinalState" type="PseudoStateType"/>
+            <xs:element minOccurs="0" maxOccurs="1" name="historyState" type="HistoryStateType"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="requiresInterface"
+                type="sla:InterfaceDeclrType"/>
+            <!-- interfaces that the LC model provides for (a) realisation of actions and/or (b) call events that may force transitions -->
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="providesInterface"
+                type="sla:InterfaceDeclrType"/>
+            <!-- interfaces that it requires of external parties e.g., monitor's interface that will be used by actions starting and ending the monitoring process -->
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="PseudoStateType">
+        <xs:attribute name="stateId" type="xs:string" use="required"/>
+    </xs:complexType>
+    <xs:complexType name="StatesType">
+        <xs:sequence>
+            <xs:element minOccurs="1" maxOccurs="unbounded" name="state" type="StateType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="StateType">
+        <xs:choice>
+            <xs:element minOccurs="0" maxOccurs="1" name="atomicState" type="AtomicStateType"/>
+            <xs:element minOccurs="0" maxOccurs="1" name="compositeState" type="CompositeStateType"
+            />
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="AtomicStateType">
+        <xs:sequence>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="action" type="StateActionType"/>
+        </xs:sequence>
+        <xs:attribute name="stateId" type="xs:string" use="required"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="description" type="xs:string"/>
+    </xs:complexType>
+    <xs:complexType name="CompositeStateType">
+        <xs:sequence>
+            <xs:element minOccurs="1" maxOccurs="unbounded" name="substate"
+                type="StateTransitionModelType"/>
+            <!-- if there are more than one substate elements the composite state is assumed to be express
+      a parallel composition of those -->
+        </xs:sequence>
+        <xs:attribute name="stateId" type="xs:string" use="required"/>
+        <xs:attribute name="name" type="xs:string"/>
+        <xs:attribute name="description" type="xs:string"/>
+    </xs:complexType>
+
+    <xs:complexType name="StateActionType">
+        <xs:sequence>
+            <xs:element minOccurs="1" maxOccurs="1" name="action" type="ActionType"/>
+        </xs:sequence>
+        <xs:attribute name="executionPoint">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="entry"/>
+                    <xs:enumeration value="exit"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="ActionType">
+        <xs:sequence>
+            <xs:choice>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="operationInvocation"
+                    type="OperationRefType"/>
+                <xs:element minOccurs="0" maxOccurs="unbounded" name="assignment"
+                    type="AssignmentType"/>
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="OperationRefType">
+        <!--  Must refer to an operation in one of the interfaces provided by the life cycle, required Schematron rule to enforce -->
+        <xs:sequence>
+            <xs:element minOccurs="1" maxOccurs="1" name="invocation" type="sla:InvocationType"/>
+        </xs:sequence>
+        <xs:attribute name="interfaceId" type="xs:string"/>
+    </xs:complexType>
+    <xs:complexType name="AssignmentType">
+        <xs:sequence>
+            <xs:element name="var">
+                <xs:complexType>
+                    <xs:attribute name="varName" type="xs:string"/>
+                    <xs:attribute name="varType">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="sting"/>
+                                <xs:enumeration value="integer"/>
+                                <xs:enumeration value="float"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="varValue" type="xs:anySimpleType"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="HistoryStateType">
+        <xs:attribute name="stateId" type="xs:string" use="required"/>
+        <xs:attribute name="refersToStateId" type="xs:string" use="required"/>
+        <!-- a Schematron rule ensures that refersToStateId attribute refers to an atomic state in the
+    immediate enclosing state of a history state element -->
+    </xs:complexType>
+
+
+
+    <xs:complexType name="TransitionsType">
+        <xs:sequence>
+            <xs:element minOccurs="1" maxOccurs="unbounded" name="transition"
+                type="IndividualTransitionType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="IndividualTransitionType">
+        <xs:sequence>
+            <xs:choice>
+                <xs:element minOccurs="0" maxOccurs="1" name="WhenCondition"
+                    type="LogicalExpressionType"/>
+                <!-- Trigerring conditions, i.e., conditions whose truth value change will trigger the transition -->
+                <!-- Guard conditions, i.e., conditions which must be true for the transition to be triggered -->
+                <xs:element minOccurs="0" maxOccurs="1" name="CallEvent" type="OperationRefType"/>
+                <!-- a call of an operation of the CUMULUS framework which should force the LC model interpreter to take the transition, should be restricted to refer to the an operation in one of the interfaces provided by the life cycle model -->
+            </xs:choice>
+            <xs:element minOccurs="0" maxOccurs="1" name="GuardCondition"
+                type="LogicalExpressionType"/>
+            <xs:element minOccurs="0" maxOccurs="unbounded" name="action" type="ActionType"/>
+        </xs:sequence>
+        <xs:attribute name="From" type="xs:string" use="required"/>
+        <xs:attribute name="To" type="xs:string" use="required"/>
+        <xs:attribute name="Probability" type="xs:float"/>
+        <xs:attribute name="Deviation" type="xs:float"/>
+    </xs:complexType>
+
+
+    <xs:complexType name="LogicalExpressionType">
+        <xs:sequence>
+            <xs:choice>
+                <xs:element name="Condition" type="ConditionType"/>
+                <xs:element name="LogicalExpression" type="LogicalExpressionType">
+                <xs:annotation>
+
+<xs:appinfo>
+
+<jxb:property name="LogicalExpressionRoot" />
+
+</xs:appinfo>
+
+</xs:annotation>   
+</xs:element>
+            </xs:choice>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="LogicalOperator">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="AND"/>
+                            <xs:enumeration value="OR"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:element name="LogicalExpression" type="LogicalExpressionType"/>
+            </xs:sequence>
+        </xs:sequence>
+        <xs:attribute default="false" name="negated" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="ConditionType">
+        <xs:choice>
+            <xs:element name="evidenceSufficiencyCondition" type="xs:string"/>
+            <xs:element name="conflictCondition" type="xs:string"/>
+            <xs:element name="expirationCondition" type="xs:string"/>
+            <xs:element name="evidenceCondition" type="EvidenceConditionType"/>
+            <xsd:element name="collectorCondition" type="xs:string"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="EvidenceConditionType">
+        <xs:sequence>
+            <xs:element name="Operand1" type="RelationalOperandType"/>
+            <xs:element name="Operand2" type="RelationalOperandType"/>
+        </xs:sequence>
+        <xs:attribute default="false" name="negated" type="xs:boolean"/>
+        <xs:attribute name="relation" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="EQUAL-TO"/>
+                    <xs:enumeration value="NOT-EQUAL-TO"/>
+                    <xs:enumeration value="LESS-THAN"/>
+                    <xs:enumeration value="GREATER-THAN"/>
+                    <xs:enumeration value="LESS-THAN-EQUAL-TO"/>
+                    <xs:enumeration value="GREATER-THAN-EQUAL-TO"/>
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+
+    <xs:complexType name="RelationalOperandType">
+        <xs:choice>
+            <xs:element name="EvidenceRefOperand" type="EvidenceRefOperandType"/>
+            <xs:element name="Constant" type="ConstantType"/>
+            <xs:element name="ArithmeticExpression" type="ArithmeticExpressionType"/>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:complexType name="EvidenceRefOperandType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="referencePath" type="xs:string" use="required"/>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="ConstantType">
+        <xs:simpleContent>
+            <xs:extension base="xs:string">
+                <xs:attribute name="type" use="required">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="NUMERICAL"/>
+                            <xs:enumeration value="STRING"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
+            </xs:extension>
+        </xs:simpleContent>
+    </xs:complexType>
+
+    <xs:complexType name="ArithmeticExpressionType">
+        <xs:sequence>
+            <xs:choice>
+                <xs:element name="ArithmeticOperand" type="ArithmeticOperandType">
+                <xs:annotation>
+
+<xs:appinfo>
+
+<jxb:property name="ArithmeticOperandChoice" />
+
+</xs:appinfo>
+
+</xs:annotation>   
+</xs:element>
+                <xs:element name="ArithmeticExpression" type="ArithmeticExpressionType"/>
+            </xs:choice>
+            <xs:sequence minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="ArithmeticOperator">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:enumeration value="PLUS"/>
+                            <xs:enumeration value="MINUS"/>
+                            <xs:enumeration value="MULTIPLY"/>
+                            <xs:enumeration value="DIVIDE"/>
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:element>
+                <xs:choice>
+                    <xs:element name="ArithmeticOperand" type="ArithmeticOperandType"/>
+                    <xs:element name="ArithmeticExpression" type="ArithmeticExpressionType"/>
+                </xs:choice>
+            </xs:sequence>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ArithmeticOperandType">
+        <xs:choice>
+            <xs:element name="evidenceRefOperand" type="EvidenceRefOperandType"/>
+            <xs:element name="Constant" type="ConstantType"/>
+            <xs:element name="Function">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded">
+                        <xs:element name="ArithmeticExpression" type="ArithmeticExpressionType"/>
+                    </xs:sequence>
+                    <xs:attribute name="name">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="MAX"/>
+                                <xs:enumeration value="MIN"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:complexType>
+            </xs:element>
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:element name="CertificationModel" type="CommonCertificationModelType"/>
+
+
+    <xs:complexType name="interfaceToT">
+        <xs:sequence>
+            <xs:element name="type" type="xs:string"/>
+            <xs:element name="call" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="stateRef" type="xs:string"/>
+    </xs:complexType>
+
+</xsd:schema>

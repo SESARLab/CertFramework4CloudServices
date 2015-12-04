@@ -1,0 +1,465 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<test:testBasedCertifcationModel xmlns:sch="http://www.ascc.net/xml/schematron"
+    xmlns:ec="http://slasoi.org/monitoring/citymonitor/xmlrule"
+    xmlns:sla="http://www.slaatsoi.eu/slamodel"
+    xmlns:jxb="http://java.sun.com/xml/ns/jaxb"
+    xmlns:cm="http://www.cumulus.org/certificate/model"
+    xmlns:test="http://www.cumulus.org/certificate/model/test"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.cumulus.org/certificate/model/test file:/Users/iridium/Jobs/testManager/CumulusTestManager/XML_Repository/testbasedCM.xsd">
+    <CertificationModelID>paper:running:example</CertificationModelID>
+    <LifeCycle>
+        <InitialState stateId="not_issued"/>
+        <states>
+            <state>
+                <atomicState stateId="not_issued" name="not issued"/>
+            </state>
+            <state>
+                <atomicState stateId="issued" name="issued"/>
+            </state>
+            <state>
+                <atomicState stateId="suspended" name="suspended"/>
+            </state>
+            <state>
+                <atomicState stateId="expired" name="expired"/>
+            </state>
+            <state>
+                <atomicState stateId="revoked" name="revoked"/>
+            </state>
+        </states>
+        <transitions>
+            <transition From="not_issued" To="issued">
+               <WhenCondition>
+                    <Condition>
+                        <collectorCondition>cfilekey</collectorCondition>
+                    </Condition>
+                    <LogicalOperator>AND</LogicalOperator>
+                    <LogicalExpression>
+                        <Condition>
+                            <collectorCondition>chttps</collectorCondition>
+                        </Condition>
+                        <LogicalOperator>AND</LogicalOperator>
+                        <LogicalExpression>
+                            <Condition>
+                                <collectorCondition>cFS</collectorCondition>
+                            </Condition>
+                            <LogicalOperator>AND</LogicalOperator>
+                        <LogicalExpression>
+                            <Condition>
+                                <collectorCondition>clogin</collectorCondition>
+                            </Condition>
+                        </LogicalExpression>
+                        </LogicalExpression>
+                        </LogicalExpression>
+                    
+                </WhenCondition>
+            </transition>
+            <transition From="issued" To="revoked">
+                <WhenCondition negated="true">
+                   <Condition>
+                        <collectorCondition>cfilekey</collectorCondition>
+                    </Condition>
+                    <LogicalOperator>AND</LogicalOperator>
+                    <LogicalExpression>
+                        <Condition>
+                            <collectorCondition>chttps</collectorCondition>
+                        </Condition>
+                        <LogicalOperator>AND</LogicalOperator>
+                        <LogicalExpression>
+                            <Condition>
+                                <collectorCondition>cFS</collectorCondition>
+                            </Condition>
+                            <LogicalOperator>AND</LogicalOperator>
+                        <LogicalExpression>
+                            <Condition>
+                                <collectorCondition>clogin</collectorCondition>
+                            </Condition>
+                        </LogicalExpression>
+                        </LogicalExpression>
+                        </LogicalExpression>
+                    
+  
+                </WhenCondition>
+            </transition>
+            <transition From="revoked" To="issued">
+                <WhenCondition>
+                   <Condition>
+                        <collectorCondition>cfilekey</collectorCondition>
+                    </Condition>
+                    <LogicalOperator>AND</LogicalOperator>
+                    <LogicalExpression>
+                        <Condition>
+                            <collectorCondition>chttps</collectorCondition>
+                        </Condition>
+                        <LogicalOperator>AND</LogicalOperator>
+                        <LogicalExpression>
+                            <Condition>
+                                <collectorCondition>cFS</collectorCondition>
+                            </Condition>
+                            <LogicalOperator>AND</LogicalOperator>
+                        <LogicalExpression>
+                            <Condition>
+                                <collectorCondition>clogin</collectorCondition>
+                            </Condition>
+                        </LogicalExpression>
+                        </LogicalExpression>
+                        </LogicalExpression>
+                    
+
+                </WhenCondition>
+            </transition>
+            
+            
+        </transitions>
+    </LifeCycle>
+    <Signature>
+        <Name>CumulusCA</Name>
+        <Role>TESTER</Role>
+    </Signature>
+    <ToC Id="Storage Web Service">
+        <CloudLayer>Storage</CloudLayer>
+        <ConcreteToc>Storage Web Service provided by Anonymez</ConcreteToc>
+        <TocDescription>Storage Web Service provided by Anonymez, using of https and owncloud. Login and Encryption Key.</TocDescription>
+        <TocURI>https://192.168.1.103:7790/storage</TocURI>
+        <ToTs>
+            <ToT collectorRefID="cFS">
+                <Interface stateRef="*">
+                    <type></type>
+                    <call>FileSytem_probe.py</call>
+                </Interface>
+            </ToT>
+            <ToT collectorRefID="chttps">
+                <Interface stateRef="*">
+                    <type></type>
+                    <call>https.py</call>
+                </Interface>
+            </ToT>
+            <ToT collectorRefID="clogin">
+                <Interface stateRef="*">
+                    <type></type>
+                    <call>loginStorageService.py</call>
+                </Interface>
+            </ToT>
+        </ToTs>
+    </ToC>
+    <SecurityProperty SecurityPropertyDefinition="data leaving the TOC matches certain patterns or heuristics it is blocked">
+        <sProperty class="end-to-end-confidentiality">
+            <propertyPerformance>
+                <propertyPerformanceRow>
+                </propertyPerformanceRow>
+            </propertyPerformance>
+            <propertyParameterList/>
+        </sProperty>
+    </SecurityProperty>
+    <CertificationModelTemplateID>template:storage:confidentiality</CertificationModelTemplateID>
+    <Collectors>
+        <AbstractCollector Id="0">
+            <TestCategory>Functionality.Input partitioning</TestCategory>
+            <TestType>Random Input</TestType>
+            <TestDescription>check SSL/TSL enabled on webservice channel</TestDescription>
+            <TestGenerationModelLink>www.cumulus-project.eu/https.sts</TestGenerationModelLink>
+            <TestAttributes>
+                <TestAttribute>
+                    <ID>1</ID>
+                    <Name>ta</Name>
+                    <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">https-nmap
+                    </Value>
+                </TestAttribute>
+            </TestAttributes>
+            <TestCases>
+               <TestCase>
+                    <ID>0</ID>
+                    <Description>check ssl/tsl </Description>
+                    <TestInstance Operation="0">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>host=192.168.43.35 port=443</Input>
+                        <ExpectedOutput></ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="1">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input></Input>
+                        <ExpectedOutput>https enabled</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="2">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input></Input>
+                        <ExpectedOutput>certificate valid in time</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="3">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input></Input>
+                        <ExpectedOutput>ciphers strong</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                </TestCase>
+            </TestCases>
+        </AbstractCollector>
+        
+        <Collector Descriptor="check SSL/TSL enabled on webservice channel" Id="chttps" isStatic="false"
+            toDeploy="true">
+            <ConditionForSomministration>
+                <DeltaTime>PT15H</DeltaTime>
+            </ConditionForSomministration>
+            <Aggregator AggregatorDescription="alltrue" transient="1">
+                <TestMetrics>
+                    <TestMetric name="lockout">
+                        <expected>true</expected>
+                        <tested></tested>
+                        <operation>=</operation>
+                    </TestMetric>
+                </TestMetrics>
+            </Aggregator>
+            <AbstractCollectorRef id="0">
+            <TestCase>
+                    <ID>0</ID>
+                    <Description>check ssl/tsl </Description>
+                    <TestInstance Operation="0">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>host=192.168.43.35 port=443</Input>
+                        <ExpectedOutput></ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="1">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input></Input>
+                        <ExpectedOutput>https enabled</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="2">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input></Input>
+                        <ExpectedOutput>certificate valid in time</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="3">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input></Input>
+                        <ExpectedOutput>ciphers strong</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                </TestCase>
+            </AbstractCollectorRef>
+        </Collector>
+
+        <AbstractCollector Id="1">
+            <TestCategory>Functionality.Input partitioning</TestCategory>
+            <TestType>Random Input</TestType>
+            <TestDescription>Check web servie login</TestDescription>
+            <TestGenerationModelLink>www.cumulus-project.eu/locjout.sts</TestGenerationModelLink>
+            <TestAttributes>
+                <TestAttribute>
+                    <ID>1</ID>
+                    <Name>ta</Name>
+                    <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">welight
+                    </Value>
+                </TestAttribute>
+            </TestAttributes>
+            <TestCases>
+                <TestCase>
+                    <ID>1</ID>
+                    <Description>lockout</Description>
+                    <TestInstance Operation="1">
+                    <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>admin=admin password=admin123</Input>
+                        <ExpectedOutput>login as admin</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="2">
+                    <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>username=userCumulusT password=pass1234</Input>
+                        <ExpectedOutput>user created</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="3">
+                    <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>username=userCumulusT password=pass1234</Input>
+                        <ExpectedOutput>login succeeds</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    
+                </TestCase>
+            </TestCases>
+        </AbstractCollector>
+        
+        <Collector Descriptor="login and lockout" Id="clogin" isStatic="false"
+            toDeploy="true">
+            <ConditionForSomministration>
+                <DeltaTime>PT15H</DeltaTime>
+            </ConditionForSomministration>
+            <Aggregator AggregatorDescription="alltrue" transient="1">
+                <TestMetrics>
+                    <TestMetric name="lockout">
+                        <expected>true</expected>
+                        <tested></tested>
+                        <operation>=</operation>
+                    </TestMetric>
+                </TestMetrics>
+            </Aggregator>
+            <AbstractCollectorRef id="1">
+            <TestCase>
+                    <ID>1</ID>
+                    <Description>lockout</Description>
+                    <TestInstance Operation="1">
+                    <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>admin=admin password=admin123</Input>
+                        <ExpectedOutput>login as admin</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="2">
+                    <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>username=userCumulusT password=pass1234</Input>
+                        <ExpectedOutput>user created</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="3">
+                    <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>username=userCumulusT password=pass1234</Input>
+                        <ExpectedOutput>login succeeds</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                </TestCase>
+            </AbstractCollectorRef>
+        </Collector>
+
+
+
+
+
+
+        <AbstractCollector Id="2">
+            <TestCategory>Functionality.Input partitioning</TestCategory>
+            <TestType>Equivalence Partioning</TestType>
+            <TestDescription>check FileSystem Access Policy</TestDescription>
+            <TestGenerationModelLink>www.cumulus-project.eu/fs.sts</TestGenerationModelLink>
+            <TestAttributes>
+                <TestAttribute>
+                    <ID>1</ID>
+                    <Name>testAttribute</Name>
+                    <Value xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                        xmlns:xs="http://www.w3.org/2001/XMLSchema" xsi:type="xs:string">atos</Value>
+                </TestAttribute>
+            </TestAttributes>
+            <TestCases>
+                <TestCase>
+                    <ID>1</ID>
+                    <Description>check keyset </Description>
+                    <TestInstance Operation="0">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>host=192.168.43.62 port=22 ssh_key_path=/opt/testAgent/testRepository/cumulus.key ssh_server_key_path=/opt/testAgent/testRepository/TestFile/ssh_public_key</Input>
+                        <ExpectedOutput></ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="1">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>filepath=/opt/welight/app/keyset/1 chmod=600</Input>
+                        <ExpectedOutput></ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="2">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>username_owner=cumulus</Input>
+                        <ExpectedOutput>6</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                        <!-- expected output read write or execute -->
+                    </TestInstance>
+                    <TestInstance Operation="3">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>username_group=cumulus_grp</Input>
+                        <ExpectedOutput>0</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="4">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>username_other=cumulus_oth</Input>
+                        <ExpectedOutput>0</ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                </TestCase>
+            </TestCases>
+        </AbstractCollector>
+        <Collector Descriptor="check FileSystem Access Policy" Id="cFS" isStatic="false"
+            toDeploy="true">
+            <ConditionForSomministration>
+                <DeltaTime>PT15H</DeltaTime>
+            </ConditionForSomministration>
+            <Aggregator AggregatorDescription="alltrue" transient="1">
+                <TestMetrics>
+                    <TestMetric name="policy">
+                        <expected>true</expected>
+                        <tested></tested>
+                        <operation>=</operation>
+                    </TestMetric>
+                </TestMetrics>
+            </Aggregator>
+            <AbstractCollectorRef id="2" >
+            <TestCase>
+                    <ID>1</ID>
+                    <Description>check keyset </Description>
+                    <TestInstance Operation="0">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>host=192.168.43.62 port=22 ssh_key_path=/opt/testAgent/testRepository/cumulus.key ssh_server_key_path=/opt/testAgent/testRepository/TestFile/ssh_public_key</Input>
+                        <ExpectedOutput></ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="1">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>filepath=/opt/welight/app/keyset/1 chmod=600</Input>
+                        <ExpectedOutput></ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="2">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>username_owner=cumulus</Input>
+                        <ExpectedOutput></ExpectedOutput>
+                        <PostConditions></PostConditions>
+                        <!-- expected output read write or execute -->
+                    </TestInstance>
+                    <TestInstance Operation="3">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>username_group=cumulus_grp</Input>
+                        <ExpectedOutput></ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                    <TestInstance Operation="4">
+                        <Preconditions></Preconditions>
+                        <HiddenCommunications></HiddenCommunications>
+                        <Input>username_other=cumulus_oth</Input>
+                        <ExpectedOutput></ExpectedOutput>
+                        <PostConditions></PostConditions>
+                    </TestInstance>
+                </TestCase>
+            </AbstractCollectorRef>
+        </Collector>
+
+        
+
+    </Collectors>
+</test:testBasedCertifcationModel>

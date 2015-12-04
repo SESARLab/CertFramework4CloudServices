@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:sch="http://www.ascc.net/xml/schematron"
+    xmlns="http://www.cumulus.org/certificate/model/test"
+    xmlns:cm="http://www.cumulus.org/certificate/model" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.cumulus.org/certificate/model/test">
+    <xs:import schemaLocation="CommonPartsCM.xsd"
+        namespace="http://www.cumulus.org/certificate/model"/>
+
+    <xs:complexType name="TestCertificationModel">
+        <xs:complexContent>
+            <xs:extension base="cm:CommonCertificationModelType">
+
+                <xs:sequence>
+
+                    <xsd:element name="CertificationModelTemplateID" type="xs:string" maxOccurs="1"
+                        minOccurs="1"/>
+                    <xs:element name="Collectors" type="CollectorType" maxOccurs="1" minOccurs="1"> </xs:element>
+                    <xsd:element minOccurs="0" name="Context"/>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="CapabilityType">
+        <xs:sequence maxOccurs="unbounded">
+            <xs:element name="Attacker" type="xs:string"> </xs:element>
+            <xs:element name="AttackName" type="xs:string"/>
+            <xs:element name="AttackerCapabilities">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded">
+                        <xs:element name="CapabilityId" type="xs:integer"/>
+                        <xs:element name="AttackerCapability" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CollectorType">
+        <xs:sequence>
+            <xs:element name="AbstractCollector" type="AbstracCollectorType" maxOccurs="unbounded"
+                minOccurs="1"/>
+            <xs:element name="Collector" type="GeneralCollectorType" maxOccurs="unbounded">
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="AbstracCollectorType">
+        <xs:sequence>
+            <xs:element name="TestCategory" type="xs:string"> </xs:element>
+            <xs:element name="Actionability" type="ActionabilityType" minOccurs="0"/>
+            <xs:element name="Capability" type="CapabilityType" minOccurs="0"/>
+            <xs:element name="TestType" type="xs:string"/>
+            <xs:element name="TestDescription" type="xs:string"/>
+            <xs:element name="TestGenerationModelLink" type="xs:anyURI"
+                default="http://www.cumulus-project.eu"/>
+            <xs:element name="TestAttributes" maxOccurs="1" minOccurs="1">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded">
+                        <xs:element name="TestAttribute" type="TestAttributeType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="TestCases">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded">
+                        <xs:element name="TestCase" type="TestCaseType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Id" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="ActionabilityType">
+        <xs:sequence>
+            <xs:element name="Description" type="xs:string"> </xs:element>
+            <xs:element name="Mechanism" type="xs:string"/>
+            <xs:element name="MechanismURI" type="xs:anyURI"/>
+        </xs:sequence>
+    </xs:complexType>
+
+
+    <xs:complexType name="TestAttributeType">
+        <xs:sequence>
+            <xs:element name="ID" type="xs:integer"/>
+            <xs:element name="Name" type="xs:string"/>
+            <xs:element name="Value" type="xs:anyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TestCaseType">
+        <xs:sequence maxOccurs="1">
+            <xs:element name="ID" type="xs:integer"/>
+            <xs:element name="Description" type="xs:string"/>
+            <xs:element name="TestInstance" type="TestInstanceType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="TestInstanceType">
+        <xs:sequence>
+            <xs:element name="Preconditions" type="xs:string"/>
+            <xs:element name="HiddenCommunications" type="xs:string"/>
+            <xs:element name="Input" type="xs:string"/>
+            <xs:element name="ExpectedOutput" type="xs:string"/>
+            <xs:element name="PostConditions" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="Operation" type="xs:string" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="GeneralCollectorType">
+        <xs:sequence>
+            <xs:element name="ConditionForSomministration" type="ConditionForSomministrationType"
+                maxOccurs="unbounded" minOccurs="0"> </xs:element>
+            <xs:element name="Aggregator">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="TestMetrics">
+                            <xs:complexType>
+                                <xs:complexContent>
+                                    <xs:extension base="TestMetricsType">
+                                        <xs:attribute name="CombiningAlgorithm" type="xs:string"
+                                            default="AND"/>
+                                    </xs:extension>
+                                </xs:complexContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="AggregatorDescription" type="xs:string"> </xs:attribute>
+                    <xs:attribute name="transient" type="xs:string"/>
+                </xs:complexType>
+            </xs:element>
+            <xs:element minOccurs="1" name="AbstractCollectorRef">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element maxOccurs="unbounded" minOccurs="0" name="TestCase"
+                            type="TestCaseType"/>
+                    </xs:sequence>
+                    <xs:attribute name="id" type="xs:string" use="required"/>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="ExpirationTime" type="xs:gYearMonth"/>
+        <xs:attribute name="Descriptor" type="xs:string"/>
+        <xs:attribute name="Id" type="xs:ID" use="required"/>
+        <xs:attribute name="isStatic" type="xs:boolean" use="required"/>
+        <xs:attribute name="toDeploy" type="xs:boolean"/>
+    </xs:complexType>
+
+    <xs:complexType name="ConditionForSomministrationType">
+        <xsd:choice>
+            <xs:element name="ThresholdTraffic" type="ThresholdTrafficType"/>
+            <xs:element name="Event" type="EventType"/>
+            <xs:element name="OtherCondition" type="xs:string"/>
+            <xs:element name="DeltaTime" type="xs:duration"/>
+        </xsd:choice>
+    </xs:complexType>
+    <xs:complexType name="ThresholdTrafficType">
+        <xs:attribute name="TrafficType" type="xs:string" use="required"/>
+        <xs:attribute name="ThresholdUnit" type="xs:string" use="required"/>
+        <xs:attribute name="ThresholdValue" type="xs:float" use="required"/>
+    </xs:complexType>
+
+    <xs:complexType name="EventType">
+        <xs:sequence>
+            <xs:element name="Action" type="xs:string"> </xs:element>
+            <xs:element name="Condition" type="xs:string"/>
+            <xs:element name="Value" type="xs:float"/>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="TestMetricsType">
+        <xs:sequence>
+            <xs:element name="TestMetric" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="expected" type="xs:string"/>
+                        <xs:element name="tested" type="xs:string"/>
+                        <xs:element default=">" name="operation" type="xs:string"/>
+                    </xs:sequence>
+                    <xs:attribute name="name" type="xs:string"/>
+                </xs:complexType>
+            </xs:element>
+            <!-- <xs:element name="KeyInfo" minOccurs="0"/> -->
+        </xs:sequence>
+    </xs:complexType>
+    <xsd:element name="testBasedCertifcationModel" type="TestCertificationModel"/>
+</xsd:schema>

@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:sch="http://www.ascc.net/xml/schematron"
+    xmlns="http://www.cumulus.org/certificate/model/test"
+    xmlns:cm="http://www.cumulus.org/certificate/model" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    targetNamespace="http://www.cumulus.org/certificate/model/test">
+
+
+    <xs:complexType name="TestCertificationModel">
+        <xs:sequence>
+            <xsd:element name="CertificationModelTemplateID" type="xs:string" maxOccurs="1" minOccurs="1"/>
+            <xs:element name="Collectors" type="CollectorType" maxOccurs="1" minOccurs="1"> </xs:element>
+            <xs:element name="Signature" type="signatureType"/>
+            <xs:element name="ToC" type="tocType"/>
+            <xsd:element name="SecurityProperty" type="securityPropertyType"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- INIZIO signatureType -->
+    <xs:complexType name="signatureType">
+        <xs:sequence>
+            <xs:element name="Name" type="xs:string"/>
+            <xs:element name="Role" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- FINE signatureType -->
+
+    <!-- INIZIO securityPropertyType -->
+    <xs:complexType name="securityPropertyType">
+        <xs:sequence maxOccurs="1" minOccurs="1">
+            <xs:element name="sProperty" type="propertyType"/>
+        </xs:sequence>
+        <!--    <xs:attribute name="SecurityPropertyId" type="xs:string" use="optional"/> -->
+        <xs:attribute name="SecurityPropertyDefinition" type="xs:string" use="required"/>
+        <!--  <xs:attribute name="Vocabulary" type="xs:string"/> -->
+        <!--  <xs:attribute name="ShortName" type="xs:string"/> -->
+    </xs:complexType>
+    <!-- propertyType -->
+    <xs:complexType name="propertyType">
+        <xs:sequence>
+            <xs:element name="propertyPerformance">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="propertyPerformanceRow" minOccurs="1"
+                            maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="propertyPerformanceCell" minOccurs="1"
+                                        maxOccurs="unbounded">
+                                        <xs:complexType>
+                                            <xs:simpleContent>
+                                                <xs:extension base="xs:anySimpleType">
+                                                  <xs:attribute name="name" type="xs:string"
+                                                  use="required"/>
+                                                </xs:extension>
+                                            </xs:simpleContent>
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="propertyParameterList">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="propertyParameter" minOccurs="0" maxOccurs="unbounded">
+                            <xs:complexType>
+                                <xs:simpleContent>
+                                    <xs:extension base="xs:anySimpleType">
+                                        <xs:attribute name="name" type="xs:string" use="required"/>
+                                    </xs:extension>
+                                </xs:simpleContent>
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="class" type="xs:anyURI" use="required"/>
+    </xs:complexType>
+    <!-- FINE securityPropertyType -->
+
+    <!-- INIZIO ToC -->
+    <xs:complexType name="tocType">
+        <xs:sequence>
+            <xs:element name="CloudLayer" maxOccurs="unbounded">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="SaaS"/>
+                        <xs:enumeration value="PaaS"/>
+                        <xs:enumeration value="IaaS"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="ConcreteToc" type="xs:string"> </xs:element>
+            <xs:element name="TocDescription" type="xs:string"> </xs:element>
+        </xs:sequence>
+        <!--<xs:attribute name="Id" use="required" type="xs:ID"> </xs:attribute>-->
+    </xs:complexType>
+    <!-- FINE ToC -->
+
+    <!-- INIZIO collectors -->
+    <xs:complexType name="CollectorType">
+        <xs:sequence>
+            <xs:element name="AbstractCollector" type="AbstracCollectorType" maxOccurs="unbounded" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- AbstracCollectorType -->
+    <xs:complexType name="AbstracCollectorType">
+        <xs:sequence>
+            <xs:element name="TestCategory">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="Functionality"/>
+                        <xs:enumeration value="Robustness"/>
+                        <xs:enumeration value="ResilienceToAttacks"/>
+                        <xs:enumeration value="PenetrationTest"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:element>
+            <xs:element name="Actionability" type="ActionabilityType" minOccurs="0"/>
+            <!-- <xs:element name="Capability" type="CapabilityType" minOccurs="0"/> -->
+            <xs:element name="Capability" type="CapabilityType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="TestType" type="xs:string"/>
+            <xs:element name="TestDescription" type="xs:string"/>
+            <xs:element name="TestGenerationModelLink" type="xs:anyURI" default="http://www.cumulus-project.eu"/>
+            <xs:element name="TestAttributes" maxOccurs="1" minOccurs="1">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded">
+                        <xs:element name="TestAttribute" type="TestAttributeType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="TestCases">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded">
+                        <xs:element name="TestCase" type="TestCaseType"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+        <xs:attribute name="Id" type="xs:ID" use="required"/>
+    </xs:complexType>
+    <!-- ActionabilityType -->
+    <xs:complexType name="ActionabilityType">
+        <xs:sequence>
+            <xs:element name="Description" type="xs:string"> </xs:element>
+            <xs:element name="Mechanism" type="xs:string"/>
+            <xs:element name="MechanismURI" type="xs:anyURI"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- CapabilityType -->
+    <xs:complexType name="CapabilityType">
+        <!-- <xs:sequence maxOccurs="unbounded"> -->
+        <xs:sequence>
+            <xs:element name="Attacker" type="xs:string"> </xs:element>
+            <xs:element name="AttackName" type="xs:string"/>
+       <!-- <xs:element name="AttackerCapabilities">
+                <xs:complexType>
+                    <xs:sequence maxOccurs="unbounded">
+                        <xs:element name="CapabilityId" type="xs:integer"/>
+                        <xs:element name="AttackerCapability" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element> -->
+            <xs:element name="AttackerCapabilities" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="CapabilityId" type="xs:integer"/>
+                        <xs:element name="AttackerCapability" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- TestAttributeType -->
+    <xs:complexType name="TestAttributeType">
+        <xs:sequence>
+            <xs:element name="ID" type="xs:integer"/>
+            <xs:element name="Name" type="xs:string"/>
+            <xs:element name="Value" type="xs:anyType"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- TestCaseType -->
+    <xs:complexType name="TestCaseType">
+        <xs:sequence maxOccurs="1">
+            <xs:element name="ID" type="xs:integer"/>
+            <xs:element name="Description" type="xs:string"/>
+            <xs:element name="TestInstance" type="TestInstanceType" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    <!-- TestInstanceType -->
+    <xs:complexType name="TestInstanceType">
+        <xs:sequence>
+            <xs:element name="Preconditions" type="xs:string"/>
+            <xs:element name="HiddenCommunications" type="xs:string"/>
+            <xs:element name="Input" type="xs:string"/>
+            <xs:element name="ExpectedOutput" type="xs:string"/>
+            <xs:element name="PostConditions" type="xs:string"/>
+        </xs:sequence>
+        <xs:attribute name="Operation" type="xs:string" use="required"/>
+    </xs:complexType>
+    <!--  FINE Collector   -->
+
+    <xsd:element name="testBasedCertifcationModel" type="TestCertificationModel"/>
+
+</xsd:schema>
