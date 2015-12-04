@@ -1,5 +1,6 @@
 "A Certification Framework for Cloud-based Services"
-M.Anisetti, A.C. Ardagna, E. Damiani, F.  Gaudenzi
+
+Authors:M.Anisetti, A.C. Ardagna, E. Damiani, F.  Gaudenzi
 
 Dipartimento di Informatica Università degli Studi di Milano
 Via Bramante 65
