@@ -1,7 +1,11 @@
 "A Certification Framework for Cloud-based Services"
+M.Anisetti, A.C. Ardagna, E. Damiani, F.  Gaudenzi
+
+Dipartimento di Informatica Università degli Studi di Milano
+Via Bramante 65
+Crema, Italy, 26013  
 
 
-Information for reviewers
 This page contains the links to the code of our certification framework components and all certification artifacts at their basis.
 
 A running version of our sytem is available [here](http://159.149.70.50:3000/index.html)
