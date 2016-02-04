@@ -1,5 +1,7 @@
 "A Certification Framework for Cloud-based Services"
 
+Published in SAC2016 - The 31st ACM/SIGAPP Symposium on Applied Computing
+
 Authors:M.Anisetti, A.C. Ardagna, E. Damiani, F.  Gaudenzi
 
 Dipartimento di Informatica Università degli Studi di Milano
@@ -9,17 +11,17 @@ Crema, Italy, 26013
 
 This page contains the links to the code of our certification framework components and all certification artifacts at their basis.
 
-A running version of our sytem is available [here](http://159.149.70.50:3000/index.html)
+A running version of our system will be available soon [](http://159.149.70.50:3000/index.html)
 
 Software
 
 	Software is available at:
 	
-	- [Test Manager] (http://github.com/)
+	- [Test Manager] (https://github.com/fgaudenzi/testManager)
 
-	- [Test Agent]   (http://github.com/)
+	- [Test Agent]   (https://github.com/patriziotufarolo/testagent/tree/production)
 
-	sorry, url were anonymezed.
+	
 
 XML SCHEMA
 	
